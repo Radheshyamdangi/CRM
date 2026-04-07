@@ -6,7 +6,7 @@ const errorHandler = require('./middleware/errorMiddleware');
 
 const app = express();
 
-// 1. CORS Setup
+// 1. CORS Setup - Sabse upar rakhein
 app.use(cors({
   origin: [
     "https://crm-dg74fv1k9-radheshyamdangis-projects.vercel.app", 
@@ -17,8 +17,14 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization", "x-auth-token"]
 }));
 
-// FIXED for Express 5: Use named parameter with wildcard
-app.options('/:path*', cors()); 
+// CRITICAL FIX: Express 5.x wildcard crash solution
+// app.options('*') ya app.options('/:path*') ki jagah ye use karein:
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 // 2. Middleware
 app.use(express.json());
