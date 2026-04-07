@@ -17,8 +17,8 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization", "x-auth-token"]
 }));
 
-// FIXED: Pre-flight for all routes with new wildcard syntax
-app.options('(.*)', cors()); 
+// FIXED for Express 5: Use named parameter with wildcard
+app.options('/:path*', cors()); 
 
 // 2. Middleware
 app.use(express.json());
