@@ -6,10 +6,10 @@ const errorHandler = require('./middleware/errorMiddleware');
 
 const app = express();
 
-// 1. Pehle CORS
+// 1. CORS Setup
 app.use(cors({
   origin: [
-    "https://crm-n24jwu0mr-radheshyamdangis-projects.vercel.app", 
+    "https://crm-dg74fv1k9-radheshyamdangis-projects.vercel.app", 
     "http://localhost:5173"
   ],
   credentials: true,
@@ -17,14 +17,16 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization", "x-auth-token"]
 }));
 
-app.options('*', cors()); // Enable pre-flight for all routes
+// FIXED: Pre-flight for all routes with new wildcard syntax
+app.options('(.*)', cors()); 
 
-// 2. Phir JSON Parsing
+// 2. Middleware
 app.use(express.json());
 
+// Database Connection
 connectDB();
 
-// 3. Phir Routes
+// 3. Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/employees', require('./routes/employeeRoutes'));
 app.use('/api/leads', require('./routes/leadRoutes'));
