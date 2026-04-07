@@ -5,21 +5,26 @@ const connectDB = require('./config/db');
 const errorHandler = require('./middleware/errorMiddleware');
 
 const app = express();
-app.use(express.json());
+
+// 1. Pehle CORS
 app.use(cors({
-  // Yahan apna Vercel wala URL dalein (bina slash '/' ke end mein)
   origin: [
-    "crm-n24jwu0mr-radheshyamdangis-projects.vercel.app", 
-    "http://localhost:5173" // Local testing ke liye ise bhi rehne dein
+    "https://crm-n24jwu0mr-radheshyamdangis-projects.vercel.app", 
+    "http://localhost:5173"
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "x-auth-token"]
 }));
 
+app.options('*', cors()); // Enable pre-flight for all routes
+
+// 2. Phir JSON Parsing
+app.use(express.json());
+
 connectDB();
 
-// Route Registration
+// 3. Phir Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/employees', require('./routes/employeeRoutes'));
 app.use('/api/leads', require('./routes/leadRoutes'));
