@@ -6,7 +6,16 @@ const errorHandler = require('./middleware/errorMiddleware');
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  // Yahan apna Vercel wala URL dalein (bina slash '/' ke end mein)
+  origin: [
+    "crm-n24jwu0mr-radheshyamdangis-projects.vercel.app", 
+    "http://localhost:5173" // Local testing ke liye ise bhi rehne dein
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-auth-token"]
+}));
 
 connectDB();
 
